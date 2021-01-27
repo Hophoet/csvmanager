@@ -116,3 +116,5 @@ template/
 
 #migrations
 core/migrations/
+#
+core/apitest.py
