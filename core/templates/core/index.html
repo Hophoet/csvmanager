@@ -3,7 +3,15 @@
 
 {% block content %}
     <form action="" method="POST" class="upload_form" enctype="multipart/form-data">
-        <img class="logo" src="{% static 'core/images/logo.svg' %}" alt="">
+        {% if messages %}
+        {% for message in messages %}
+
+        <div class="message_container" role='alert'>
+          <p>{{message}}</p>
+        </div>
+        {% endfor %}
+      {% endif %}
+        <!-- <img class="logo" src="{% static 'core/images/logo.svg' %}" alt=""> -->
 
         {% csrf_token %}
         {{form}}
