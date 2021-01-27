@@ -1,11 +1,13 @@
 from django.shortcuts import render, HttpResponse, Http404, reverse
 from django.conf import settings
+from django.contrib import messages
 
 import os
 import os.path
 import pandas
 from .forms import CsvModalForm
 from .models import Csv
+from .csv import CSV
 
 
 def index(request):
@@ -16,37 +18,26 @@ def index(request):
             data = form.cleaned_data
             file1 = data['file1']
             file2 = data['file2']
-            csv_manager(file1, file2)
+            action = data['actions']
+            CSV.get_difference(file1, file2)
             PROJECT_ROOT = os.path.abspath(os.path.dirname('csvs/'))
-            print(PROJECT_ROOT)
-            # print(data)
-            # r = pandas.read_csv(file1)
-            # print(r)
-            # print(dir(file))
             file = PROJECT_ROOT+'/update.csv'
             context['file'] = file
             return download(request, file)
+            # if CSV.files_are_same_columns(file1, file2):
+            #     if action == 'DIF':
+            #         CSV.get_difference(file1, file2)
+            #         PROJECT_ROOT = os.path.abspath(os.path.dirname('csvs/'))
+            #         file = PROJECT_ROOT+'/update.csv'
+            #         context['file'] = file
+            #         return download(request, file)
+            messages.info(request, 'actions not available')
+
+            # else:
+            #     messages.info(request, 'files are not compatible')
 
     context['form'] = form
     return render(request, 'core/index.html', context)
-
-
-def csv_manager(file1, file2):
-    fileone = file1.readlines()
-    filetwo = file2.readlines()
-
-    with open('csvs/update.csv', 'w') as outFile:
-        for line in filetwo:
-            if line not in fileone:
-                line = line.decode()
-                # print(type(line.decode('ascii')))
-                outFile.write(line)
-
-        for line in fileone:
-            if line not in filetwo:
-                line = line.decode()
-                # print(type(line.decode('ascii')))
-                outFile.write(line)
 
 
 def download(request, path):
