@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form action="" method="POST" class="upload_form" enctype="multipart/form-data">
+        <img class="logo" src="{% static 'core/images/logo.svg' %}" alt="">
+
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="submit_button">Confirm</button>
+    </form>
+
+  {% endblock content %}
