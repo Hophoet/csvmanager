@@ -33,14 +33,14 @@ class CSV:
     def get_difference(cls, file1, file2):
         fileone = file1.readlines()
         filetwo = file2.readlines()
+        columns = fileone[0]
         with open('csvs/update.csv', 'w') as outFile:
+            outFile.write(columns.decode())
             for line in filetwo:
                 if line not in fileone:
-                    print('line to add', line)
                     line = line.decode()
                     outFile.write(line)
             for line in fileone:
                 if line not in filetwo:
-                    print('line to add', line)
                     line = line.decode()
                     outFile.write(line)
